@@ -1,4 +1,4 @@
-const myValue = 'New App'
+const myValue = 'new-app'
 
 module.exports = {
   name: myValue,

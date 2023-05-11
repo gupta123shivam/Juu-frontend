@@ -1,6 +1,6 @@
 {
   "expo": {
-    "scheme": "acme",
+    "scheme": "newapp",
     "web": {
       "bundler": "metro"
     },
@@ -19,7 +19,6 @@
     "resizeMode": "cover"
   },
   "android": {
-    "package": "com.shivamgupta4891651.newapp",
     "adaptiveIcon": {
       "foregroundImage": "./assets/adaptive-icon.png",
       "backgroundColor": "#FEF9B0"
