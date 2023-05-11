@@ -4,7 +4,26 @@
     "web": {
       "bundler": "metro"
     },
-    "name": "my-app",
-    "slug": "my-app"
+    "name": "new-app",
+    "slug": "new-app"
+  },
+  "plugins": [
+    "expo-camera",
+    {
+      "cameraPermission": "Allow $(MyApp) to access your camera."
+    }
+  ],
+  "splash": {
+    "image": "./assets/splash.png",
+    "backgroundColor": "#FEF9B0",
+    "resizeMode": "cover"
+  },
+  "android": {
+    "package": "com.shivamgupta4891651.newapp",
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/adaptive-icon.png",
+      "backgroundColor": "#FEF9B0"
+    },
+    "permissions": ["CAMERA"]
   }
 }
