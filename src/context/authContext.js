@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from 'react'
-import { Alert, ToastAndroid } from 'react-native'
+import { Alert, ToastAndroid, Appearance, useColorScheme } from 'react-native'
 import {
   RESTORE_TOKEN,
   SIGN_IN,
@@ -45,6 +45,7 @@ export const initialState = {
   previousBills: [],
   cart: [],
   paymentParams: {},
+  preferredTheme: useColorScheme(),
 }
 
 const AuthContext = createContext(null)

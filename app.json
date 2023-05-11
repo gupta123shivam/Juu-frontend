@@ -14,15 +14,20 @@
     }
   ],
   "splash": {
-    "image": "./assets/splash.png",
+    "image": "./src/assets/splash.png",
     "backgroundColor": "#FEF9B0",
     "resizeMode": "cover"
   },
   "android": {
+    "package": "com.shivamgupta4891651.newapp",
     "adaptiveIcon": {
-      "foregroundImage": "./assets/adaptive-icon.png",
+      "foregroundImage": "./src/assets/adaptive-icon.png",
       "backgroundColor": "#FEF9B0"
     },
-    "permissions": ["CAMERA"]
+    "permissions": ["CAMERA"],
+    "userInterfaceStyle": "automatic"
+  },
+  "extra": {
+    "eas": {}
   }
 }

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { useFonts } from 'expo-font'
+import { loadAsync, useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 
 import { ThemeProvider } from 'react-native-rapi-ui'
@@ -16,11 +16,14 @@ export default function App() {
     DMMedium: require('./src/assets/fonts/DMSans-Medium.ttf'),
     DMRegular: require('./src/assets/fonts/DMSans-Regular.ttf'),
   })
-  
-  React.useEffect(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync()
+
+  React.useEffect(() => {
+    loadFonts = async () => {
+      if (fontsLoaded) {
+        await SplashScreen.hideAsync()
+      }
     }
+    loadFonts()
   }, [fontsLoaded])
 
   if (!fontsLoaded) {
