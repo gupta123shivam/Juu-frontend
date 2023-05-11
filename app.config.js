@@ -13,6 +13,9 @@ module.exports = {
   extra: {
     fact: 'kittens are cool',
   },
+  android: {
+    package: 'com.shivamgupta4891651.newapp',
+  },
 }
 
 // module.exports = ({ config }) => {
