@@ -12,17 +12,18 @@ module.exports = {
 
   extra: {
     fact: 'kittens are cool',
-  },
-  android: {
-    package: 'com.shivamgupta4891651.newapp',
+    apiUrl: process.env.API_URL,
   },
   expo: {
+    jsEngine: 'hermes',
+    android: {
+      package: 'com.shivamgupta4891651.newapp',
+    },
     extra: {
       eas: {
         projectId: '7f6902fa-42d0-4054-99a1-b5d3072aaba2',
       },
     },
-    jsEngine: 'jsc',
   },
 }
 

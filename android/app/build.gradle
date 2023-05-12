@@ -113,7 +113,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.newapp"
+    namespace 'com.shivamgupta4891651.newapp'
     defaultConfig {
         applicationId 'com.shivamgupta4891651.newapp'
         minSdkVersion rootProject.ext.minSdkVersion
