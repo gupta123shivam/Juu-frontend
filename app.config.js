@@ -1,4 +1,4 @@
-const myValue = 'new-app'
+const myValue = 'newapp'
 
 module.exports = {
   name: myValue,
@@ -19,9 +19,11 @@ module.exports = {
     android: {
       package: 'com.shivamgupta4891651.newapp',
     },
+
     extra: {
+      jsEngine: 'hermes',
       eas: {
-        projectId: '7f6902fa-42d0-4054-99a1-b5d3072aaba2',
+        projectId: '4f7f61d5-e107-4c17-b27f-7e388cbd2acf',
       },
     },
   },

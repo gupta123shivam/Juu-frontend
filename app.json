@@ -4,10 +4,16 @@
     "web": {
       "bundler": "metro"
     },
-    "name": "new-app",
-    "slug": "new-app",
+    "extra": {
+      "eas": {
+        "projectId": "4f7f61d5-e107-4c17-b27f-7e388cbd2acf"
+      }
+    },
+    "name": "newapp",
+    "slug": "newapp",
     "sdkVersion": "48.0.0",
-    "entryPoint": ".vscode\\exponentIndex.js"
+    "entryPoint": ".vscode\\exponentIndex.js",
+    "jsEngine": "hermes"
   },
   "plugins": [
     "expo-camera",
@@ -29,8 +35,7 @@
     "permissions": [
       "CAMERA"
     ],
-    "userInterfaceStyle": "automatic",
-    "jsEngine": "hermes"
+    "userInterfaceStyle": "automatic"
   },
-  "name": "new-app"
+  "name": "newapp"
 }

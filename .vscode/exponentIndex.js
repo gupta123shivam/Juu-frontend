@@ -5,6 +5,6 @@ var { Component } = React;
 var ReactNative = require('c:/Users/gupta/Documents/react-native-project/new-app/node_modules/react-native');
 var { AppRegistry } = ReactNative;
 AppRegistry.registerRunnable('main', function(appParameters) {
-    AppRegistry.runApplication('new-app', appParameters);
+    AppRegistry.runApplication('newapp', appParameters);
 });
-require('c:/Users/gupta/Documents/react-native-project/new-app/index.android.js');
+require('c:/Users/gupta/Documents/react-native-project/new-app/index.js');

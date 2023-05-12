@@ -1,3 +1,4 @@
+import 'expo-dev-client';
 import React, { useCallback } from 'react'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
