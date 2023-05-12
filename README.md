@@ -7,3 +7,8 @@ Use [`expo-router`](https://expo.github.io/router) to build native navigation us
 ```sh
 npm start
 ```
+Beforre building 
+```
+expo prebuild --npm --clean
+eas build
+```

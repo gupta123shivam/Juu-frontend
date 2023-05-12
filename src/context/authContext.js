@@ -45,7 +45,7 @@ export const initialState = {
   previousBills: [],
   cart: [],
   paymentParams: {},
-  preferredTheme: useColorScheme(),
+  preferredTheme: 'light',
 }
 
 const AuthContext = createContext(null)

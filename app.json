@@ -5,7 +5,9 @@
       "bundler": "metro"
     },
     "name": "new-app",
-    "slug": "new-app"
+    "slug": "new-app",
+    "sdkVersion": "48.0.0",
+    "entryPoint": ".vscode\\exponentIndex.js"
   },
   "plugins": [
     "expo-camera",
@@ -24,10 +26,11 @@
       "foregroundImage": "./src/assets/adaptive-icon.png",
       "backgroundColor": "#FEF9B0"
     },
-    "permissions": ["CAMERA"],
-    "userInterfaceStyle": "automatic"
+    "permissions": [
+      "CAMERA"
+    ],
+    "userInterfaceStyle": "automatic",
+    "jsEngine": "hermes"
   },
-  "extra": {
-    "eas": {}
-  }
+  "name": "new-app"
 }
