@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, ScrollView, TouchableOpacity, FlatList } from 'react-native'
+import { View, FlatList } from 'react-native'
 import { Layout, Text, TopNav, Button } from 'react-native-rapi-ui'
 import { ActivityIndicator, MD2Colors } from 'react-native-paper'
 import { Ionicons } from '@expo/vector-icons'
 
 import { useAuthContext } from '../../context/authContext'
+import { ItemCard } from '../../components'
 
 export default function Cart({ navigation }) {
   const [error, setError] = useState('')
@@ -12,7 +13,7 @@ export default function Cart({ navigation }) {
   useEffect(() => {
     ;(async () => {
       try {
-        await fetchCart()
+        fetchCart()
       } catch (err) {
         setError('Error Occured while fetching cart.')
       }
@@ -30,26 +31,29 @@ export default function Cart({ navigation }) {
       </CartLayout>
     )
   }
-  if (error) {
+  if (!isLoading && error) {
     return (
       <CartLayout navigation={navigation}>
         <Text size='lg'>Error: </Text>
-        <Text>{error}</Text>
-        <Text>Please try again later.</Text>
+        <Text>{error} Please try again later.</Text>
 
         <Button
           text='Fetch Cart Again'
-          onPress={fetchCart}
+          onPress={() => {
+            setError('')
+            fetchCart()
+          }}
           style={{ marginVertical: 10 }}
         />
       </CartLayout>
     )
   }
-  const checkCart = !cart.items || cart.items.length < 1
-  if (checkCart) {
+
+  const checkCart = cart.items && cart.items.length > 0
+  if (!checkCart) {
     return (
       <CartLayout navigation={navigation}>
-        <Text>Nothing is on the cart. Please load product.</Text>
+        <Text>Nothing is on the cart. Please load products.</Text>
         <Button
           text={'Go to Scan'}
           onPress={() => navigation.navigate('Scan')}
@@ -57,58 +61,22 @@ export default function Cart({ navigation }) {
       </CartLayout>
     )
   }
+
   return (
     <CartLayout navigation={navigation}>
       <FlatList
         data={cart.items}
-        renderItem={(item) => <Item item={item} />}
+        renderItem={(item) => <ItemCard item={item.item} />}
         keyExtractor={(item, idx) => item.productID}
+        showsVerticalScrollIndicator={true}
+        style={{ gap: 5, flex: 1, marginVertical: 'auto' }}
       />
       <Button
         text='Proceed to Buy'
         onPress={() => navigation.navigate('Checkout')}
+        size='md'
       />
     </CartLayout>
-  )
-}
-
-const Item = ({ item: { item } }) => {
-  return (
-    <TouchableOpacity>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          columnGap: 20,
-          marginHorizontal: 5,
-          backgroundColor: MD2Colors.grey300,
-          width: '100%',
-          borderColor: MD2Colors.grey700,
-          borderRadius: 10,
-        }}
-      >
-        <Text
-          style={{ fontSize: 25, textTransform: 'capitalize' }}
-          numberOfLines={1}
-        >
-          {item.name}
-        </Text>
-        <View>
-          <Text
-            style={{ fontSize: 15, color: MD2Colors.grey600, marginTop: 3 }}
-          >
-            Quantity: {item.quantity}
-          </Text>
-          <Text
-            style={{ fontSize: 15, color: MD2Colors.grey600, marginTop: 3 }}
-          >
-            Price: {item.price}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
   )
 }
 

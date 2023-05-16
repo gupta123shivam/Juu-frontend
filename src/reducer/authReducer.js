@@ -51,7 +51,6 @@ function reducer(prevState, action) {
       return {
         ...prevState,
         isLoading: true,
-        error: '',
       }
     }
 
@@ -64,8 +63,7 @@ function reducer(prevState, action) {
 
     case FETCH_CART_FAILED: {
       return {
-        ...prevState,
-        error: payload.error,
+        ...prevState,error: payload.error
       }
     }
 
@@ -88,12 +86,16 @@ function reducer(prevState, action) {
     }
 
     case MARK_TAG_WITH_USER_START:
-    case ADD_PRODUCT_TO_TAG_CART_START:
+    case ADD_PRODUCT_TO_TAG_CART_START: {
+      return { ...prevState, isLoading: true }
+    }
     case LOGIN_START:
     case REGISTER_START: {
+      // reset the user data already persent
       return {
         ...prevState,
         isLoading: true,
+        userInfo: null,
       }
     }
 
@@ -105,7 +107,7 @@ function reducer(prevState, action) {
     case MARK_TAG_WITH_USER_SUCCEED: {
       return {
         ...prevState,
-        tagID: payload.tag.tagID,
+        tagID: payload.tagID,
       }
     }
 

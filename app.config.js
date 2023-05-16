@@ -10,10 +10,7 @@ module.exports = {
   // import Constants from 'expo-constants';
   // Constants.expoConfig.extra.fact === 'kittens are cool';
 
-  extra: {
-    fact: 'kittens are cool',
-    apiUrl: process.env.API_URL,
-  },
+  extra: {},
   expo: {
     jsEngine: 'hermes',
     android: {

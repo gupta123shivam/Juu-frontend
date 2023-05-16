@@ -1,14 +1,17 @@
 // eslint-disable-next-line react-hooks/exhaustive-deps
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native'
 import React, { useEffect, useState } from 'react'
-import { View, TouchableOpacity, Alert, ToastAndroid } from 'react-native'
+import { View, StyleSheet, Alert, ToastAndroid } from 'react-native'
 import { Layout, Text, TopNav, Button } from 'react-native-rapi-ui'
 import { ActivityIndicator, MD2Colors } from 'react-native-paper'
 import { Ionicons } from '@expo/vector-icons'
 import axios from 'axios'
 
+import Constants from 'expo-constants'
 import { useAuthContext } from '../../context/authContext'
-import { PUBLISHABLE_KEY, MERCHANT_ID, API_URL } from '../../constants'
+// TODO Remove merchandid and publish key to .env
+import { COLORS, SHADOWS, SIZES } from '../../constants'
+import { MERCHANT_ID, PUBLISHABLE_KEY } from '@env'
 
 export default function Cart({ navigation }) {
   const [ready, setReady] = useState(false)
@@ -18,6 +21,8 @@ export default function Cart({ navigation }) {
   const { userInfo, fetchPaymentParams, paymentParams, isLoading } =
     useAuthContext()
 
+    console.log(paymentParams, err, ready)
+
   useEffect(() => {
     if (userInfo !== null) {
       initializePaymentSheet()
@@ -25,6 +30,7 @@ export default function Cart({ navigation }) {
   }, [])
 
   const initializePaymentSheet = async () => {
+    // return
     try {
       await fetchPaymentParams()
 
@@ -34,12 +40,14 @@ export default function Cart({ navigation }) {
       })
 
       if (error) {
+        setErr(error)
         Alert.alert(`Error Code: ${error.code}`, error.message)
       } else {
         setReady(true)
       }
     } catch (error) {
       setErr(true)
+      setReady(false)
       ToastAndroid.show('Payment Intent generation failed.', ToastAndroid.SHORT)
     }
   }
@@ -60,6 +68,7 @@ export default function Cart({ navigation }) {
   }
 
   const buy = async () => {
+    // if (!ready) await initPaymentSheet()
     const { error } = await presentPaymentSheet()
     if (error) {
       Alert.alert(`Error code: ${error.code}`, error.message)
@@ -69,6 +78,7 @@ export default function Cart({ navigation }) {
         'Success',
         'The payment was confirmed successfully. You will be redirected to Home in 5 sec'
       )
+      // send a request back to server telling that the payment was successful
       setTimeout(
         () => navigation.navigate('HomeScreens', { screen: 'Home' }),
         5000
@@ -80,7 +90,7 @@ export default function Cart({ navigation }) {
   if (userInfo == null || !userInfo.email) {
     return (
       <CheckoutLayout navigation={navigation}>
-        <Text>No Userinfo was found. PLease make sure you are logged in</Text>
+        <Text>No User was found. Please login/register first.</Text>
         <Button
           text='Go to Login'
           onPress={() => navigation.navigate('Login')}
@@ -101,7 +111,7 @@ export default function Cart({ navigation }) {
     )
   }
 
-  if (err) {
+  if (!isLoading && err) {
     return (
       <CheckoutLayout navigation={navigation}>
         <Text>Some error occured. Please try again later.</Text>
@@ -132,41 +142,19 @@ export default function Cart({ navigation }) {
 }
 
 const Checkout = ({ paymentParams }) => {
+  console.log(paymentParams)
   return (
-    <TouchableOpacity>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          columnGap: 20,
-          marginHorizontal: 5,
-          backgroundColor: MD2Colors.grey300,
-          width: '100%',
-          maxHeight: 100,
-        }}
-      >
-        <Text
-          style={{ fontSize: 25, textTransform: 'capitalize' }}
-          numberOfLines={1}
-        >
-          Juu-India
-        </Text>
-        <View>
-          <Text
-            style={{ fontSize: 15, color: MD2Colors.grey600, marginTop: 3 }}
-          >
-            No.of Items : {paymentParams.quantity}
-          </Text>
-          <Text
-            style={{ fontSize: 15, color: MD2Colors.grey600, marginTop: 3 }}
-          >
-            Total : {paymentParams.amount / 100}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+    <View style={styles.container}>
+      <Text style={{ fontSize: 25, textTransform: 'capitalize' }}>
+        Juu-India
+      </Text>
+      <Text style={{ fontSize: 15, color: MD2Colors.grey600, marginTop: 3 }}>
+        Total Qty : {paymentParams.quantity}
+      </Text>
+      <Text style={{ fontSize: 15, color: MD2Colors.grey600, marginTop: 3 }}>
+        Total Amount: {paymentParams.amount / 100}
+      </Text>
+    </View>
   )
 }
 
@@ -182,10 +170,9 @@ function CheckoutLayout({ children, navigation }) {
         style={{
           flex: 1,
           alignItems: 'center',
-          justifyContent: 'flex-start',
+          justifyContent: 'space-around',
           rowGap: 10,
-          marginTop: 20,
-          marginBottom: 30,
+          marginTop: 5,
         }}
       >
         {children}
@@ -193,3 +180,33 @@ function CheckoutLayout({ children, navigation }) {
     </Layout>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: SIZES.medium,
+    borderRadius: SIZES.small,
+    backgroundColor: '#FFF',
+    ...SHADOWS.medium,
+    shadowColor: COLORS.white,
+    width: 340,
+    rowGap: 10,
+    maxHeight: 130,
+  },
+  textContainer: {
+    flex: 1,
+    marginHorizontal: SIZES.medium,
+  },
+  itemName: {
+    fontSize: SIZES.medium,
+    fontFamily: 'DMBold',
+    color: COLORS.primary,
+  },
+  itemType: {
+    fontSize: SIZES.small + 2,
+    fontFamily: 'DMRegular',
+    color: COLORS.gray,
+    marginTop: 3,
+    textTransform: 'capitalize',
+  },
+})

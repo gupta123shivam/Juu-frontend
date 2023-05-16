@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-// import { RAPID_KEY } from 'react-native-dotenv'
+import Constants from 'expo-constants'
 
-const useFetch = (endpoint, query) => {
+const useFetch = (endpoint, query, method_type) => {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
+  const { apiUrl } = Constants.expoConfig.extra
+
   const options = {
-    method: 'GET',
+    method: method_type,
     url: `https://jsearch.p.rapidapi.com/${endpoint}`,
     params: {
       query: 'Python developer in Texas, USA',

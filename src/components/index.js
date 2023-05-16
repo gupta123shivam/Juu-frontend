@@ -1,19 +1,5 @@
-import ScreenHeaderBtn from "./common/header/ScreenHeaderBtn";
-
-// home screen
-import Welcome from "./home/welcome/Welcome";
-import Nearbyjobs from "./home/nearby/Nearbyjobs";
-import Popularjobs from "./home/popular/Popularjobs";
-
-//
+import ScreenHeaderBtn from './common/header/ScreenHeaderBtn'
 
 // common
-import NearbyJobCard from "./common/cards/nearby/NearbyJobCard";
-
-export {
-  ScreenHeaderBtn,
-  Welcome,
-  Nearbyjobs,
-  Popularjobs,
-  NearbyJobCard
-};
+import ItemCard from './common/cards/items/ItemCard'
+export { ScreenHeaderBtn, ItemCard }

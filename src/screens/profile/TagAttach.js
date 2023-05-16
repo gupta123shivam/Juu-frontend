@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   View,
   Alert,
   StyleSheet,
   ActivityIndicator,
-  ToastAndroid,
   TouchableOpacity,
 } from 'react-native'
 import { Layout, Text, TopNav, Button, useTheme } from 'react-native-rapi-ui'
 import { Camera, CameraType } from 'expo-camera'
 import { Ionicons } from '@expo/vector-icons'
+import Loading from '../utils/Loading'
 
 import { useAuthContext } from '../../context/authContext'
 
@@ -25,12 +25,9 @@ export default function ({ navigation }) {
   const { isDarkmode } = useTheme()
 
   useEffect(() => {
-    ;(async () => {
-      const { status } = await Camera.getCameraPermissionsAsync()
-      console.log(1, status)
-      setPermission(status === 'granted')
-    })()
+    requestCameraPermission()
 
+    // For remounting camera
     navigation.addListener('focus', () => {
       setLoaded(true)
     })
@@ -39,11 +36,10 @@ export default function ({ navigation }) {
     })
   }, [])
 
-  const requestCameraPermission = async () => {
+  const requestCameraPermission = useCallback(async () => {
     const { status } = await Camera.requestCameraPermissionsAsync()
-    console.log(status)
     setPermission(status === 'granted')
-  }
+  })
 
   const handleBarCodeScanned = (scanningResult) => {
     if (!scanned) {
@@ -58,7 +54,7 @@ export default function ({ navigation }) {
           throw Error()
         }
       } catch (err) {
-        const errMessage = 'Please scan another qr code.'
+        const errMessage = 'Please scan another QR Code.'
         Alert.alert('Invalid QR Scanned', errMessage, [
           {
             text: 'Cancel',
@@ -83,30 +79,38 @@ export default function ({ navigation }) {
     )
   }
 
-  if (permission == null) {
-    // Camera permissions are still loading
+  // User is not looged/registerd
+  if (!userInfo.email) {
     return (
       <Layout>
         <TopNav middleContent='TagAttach' />
         <View style={styles.container}>
-          <ActivityIndicator />
+          <Text style={{ textAlign: 'center', color: 'red' }}>
+            Please login/register first.
+          </Text>
         </View>
       </Layout>
     )
   }
 
+  // Camera permissions are still loading
+  if (permission == null) {
+    return <Loading />
+  }
+
+  // Camera permissions are not granted 
   if (!permission) {
-    // Camera permissions are not granted yet
     return (
       <Layout>
         <TopNav middleContent='TagAttach' />
         <View style={styles.container}>
           <Text style={{ textAlign: 'center' }}>
-            We need your permission to show the camera
+            We need your permission to scan the tag
           </Text>
           <Button
             onPress={requestCameraPermission}
             text='Grant Camera permission'
+            style={styles.button}
           />
         </View>
       </Layout>

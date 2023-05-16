@@ -4,12 +4,13 @@ import {
   Alert,
   StyleSheet,
   ActivityIndicator,
-  ToastAndroid,
   TouchableOpacity,
 } from 'react-native'
-import { Layout, Text, TopNav, Button, useTheme } from 'react-native-rapi-ui'
+import { Layout, TopNav, Button, useTheme } from 'react-native-rapi-ui'
 import { Camera, CameraType } from 'expo-camera'
 import { Ionicons } from '@expo/vector-icons'
+
+import Loading from '../utils/Loading'
 
 import { useAuthContext } from '../../context/authContext'
 
@@ -25,10 +26,8 @@ function Scan({ navigation }) {
   const { isDarkmode } = useTheme()
 
   useEffect(() => {
-    ;(async () => {
-      const { status } = await Camera.getCameraPermissionsAsync()
-      setPermission(status === 'granted')
-    })()
+    requestCameraPermission()
+
     navigation.addListener('focus', () => {
       setLoaded(true)
     })
@@ -50,7 +49,11 @@ function Scan({ navigation }) {
       try {
         const res = JSON.parse(data)
         if (typeof res == 'object' && res.productID) {
-          addProductToTagCart({ productID: 'productID_101', navigation, setScanned })
+          addProductToTagCart({
+            productID: 'productID_101',
+            navigation,
+            setScanned,
+          })
           // markTagWithUser({ productID: res.productID, navigation, setScanned })
         } else {
           throw Error()
@@ -83,23 +86,24 @@ function Scan({ navigation }) {
 
   if (permission == null) {
     // Camera permissions are still loading
-    return (
-      <Layout>
-        <TopNav middleContent='Scan' />
-        <View style={styles.container}>
-          <ActivityIndicator />
-        </View>
-      </Layout>
-    )
+    return <Loading />
   }
 
   if (!permission) {
     // Camera permissions are not granted yet
-    requestCameraPermission()
     return (
       <Layout>
-        <TopNav middleContent='TagAttach' />
-        <View />
+        <TopNav middleContent='Scan' />
+        <View style={styles.container}>
+          <Text style={{ textAlign: 'center' }}>
+            We need your permission to scan the QR Code
+          </Text>
+          <Button
+            onPress={requestCameraPermission}
+            text='Grant Camera permission'
+            style={styles.button}
+          />
+        </View>
       </Layout>
     )
   }

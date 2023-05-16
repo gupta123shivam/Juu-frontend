@@ -153,7 +153,7 @@ const MainTabs = () => {
         component={SettingScreens}
         options={{
           tabBarLabel: ({ focused }) => (
-            <TabBarText focused={focused} title='Profile' />
+            <TabBarText focused={focused} title='Setting' />
           ),
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} icon={'ios-settings-outline'} />
@@ -225,21 +225,6 @@ const usePersistanceNavigation = () => {
       restoreState()
     }
   }, [isReady])
-
-  // if (!isReady) {
-  //   return <ActivityIndicator />;
-  // }
-
-  // return (
-  // <NavigationContainer
-  //   initialState={initialState}
-  //   onStateChange={(state) =>
-  //     AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
-  //   }
-  // >
-  //     <AppScreens />
-
-  // );
 
   return { isReady, initialState, PERSISTENCE_KEY }
 }

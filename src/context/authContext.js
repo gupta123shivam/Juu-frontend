@@ -25,8 +25,11 @@ import {
 
 import authReducer from '../reducer/authReducer'
 import axios from 'axios'
+import {API_URL} from '@env'
 
-import { API_URL } from '../constants'
+const saveToSecureStorage = async () => {}
+const getFromSecureStorage = async () => {}
+const removeFromSecureStorage = async () => {}
 
 export const initialState = {
   isLoading: false,
@@ -55,10 +58,10 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState)
 
   const signIn = async ({ navigation, data }) => {
-    // In a production app, we need to send some data (usually username, password) to server and get a token
     // We will also need to handle errors if sign in failed
     // After getting token, we need to persist the token using `SecureStore`
     // In the example, we'll use a dummy token
+    // after login starts/succeed, can delete token from secure storage
 
     dispatch({ type: LOGIN_START })
     try {
@@ -67,14 +70,16 @@ export const AuthProvider = ({ children }) => {
 
       if (success) {
         dispatch({ type: LOGIN_SUCCEED, payload: { user } })
-        ToastAndroid.show('User Login successfully', ToastAndroid.SHORT)
+        ToastAndroid.show('User Logged In', ToastAndroid.SHORT)
         navigation.navigate('MainTabs')
       } else {
         ToastAndroid.show('User Login failed' + message, ToastAndroid.SHORT)
       }
     } catch (error) {
-      console.log(error)
-      ToastAndroid.show(error.message, ToastAndroid.SHORT)
+      ToastAndroid.show(
+        'Something went wrong. Please try again later.',
+        ToastAndroid.SHORT
+      )
     } finally {
       dispatch({ type: SET_IS_LOADING, payload: { isLoading: false } })
     }
@@ -82,11 +87,6 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = () => dispatch({ type: SIGN_OUT })
   const signUp = async ({ navigation, data }) => {
-    // In a production app, we need to send user data to server and get a token
-    // We will also need to handle errors if sign up failed
-    // After getting token, we need to persist the token using `SecureStore`
-    // In the example, we'll use a dummy token
-
     dispatch({ type: REGISTER_START })
     try {
       const res = await axios.post(`${API_URL}/user/register`, data)
@@ -100,7 +100,10 @@ export const AuthProvider = ({ children }) => {
         ToastAndroid.show('User register failed', ToastAndroid.SHORT)
       }
     } catch (error) {
-      ToastAndroid.show(error.message, ToastAndroid.SHORT)
+      ToastAndroid.show(
+        'Something went wrong. Please try again later.',
+        ToastAndroid.SHORT
+      )
     } finally {
       dispatch({ type: SET_IS_LOADING, payload: { isLoading: false } })
     }
@@ -125,11 +128,14 @@ export const AuthProvider = ({ children }) => {
       const { tag, success, message } = res.data
 
       if (success) {
-        dispatch({ type: MARK_TAG_WITH_USER_SUCCEED, payload: { tag } })
+        dispatch({
+          type: MARK_TAG_WITH_USER_SUCCEED,
+          payload: { tagID: tag.tagID },
+        })
         ToastAndroid.show(message, ToastAndroid.SHORT)
       }
     } catch (err) {
-      const errMessage = ' Please scan another qr code.'
+      const errMessage = ' Please scan another QR Code.'
       try {
         errMessage = err.response.data.message + errMessage
       } catch (error) {}
@@ -146,7 +152,6 @@ export const AuthProvider = ({ children }) => {
     } finally {
       dispatch({ type: SET_IS_LOADING, payload: { isLoading: false } })
     }
-    // return success=true, if tagID is attached to user, otherwisw tell him to scan again
   }
 
   const addProductToTagCart = async ({ productID, navigation, setScanned }) => {
@@ -165,7 +170,7 @@ export const AuthProvider = ({ children }) => {
         ToastAndroid.show(message, ToastAndroid.SHORT)
       }
     } catch (err) {
-      const errMessage = 'Product loadin failed'
+      const errMessage = 'Product loading failed'
       try {
         errMessage += err.response.data.message
       } catch (error) {}
@@ -188,7 +193,7 @@ export const AuthProvider = ({ children }) => {
   const fetchCart = async () => {
     dispatch({ type: FETCH_CART_START })
     try {
-      const res = await axios.get(`${API_URL}/cart/get-cart`, {
+      const res = await axios.get(`${process.env.API_URL}/cart/get-cart`, {
         params: { tagID: state.tagID },
       })
       const result = res.data
@@ -200,7 +205,6 @@ export const AuthProvider = ({ children }) => {
         type: FETCH_CART_FAILED,
         payload: { error: 'Cart fetching failed' },
       })
-      ToastAndroid.show('Cart fetching failed', ToastAndroid.SHORT)
     } finally {
       dispatch({ type: SET_IS_LOADING, payload: { isLoading: false } })
     }
@@ -215,24 +219,19 @@ export const AuthProvider = ({ children }) => {
           email: state.userInfo.email,
         }
       )
-      const { success, message, paymentIntent, checkoutInfo } = res.data
+      const { paymentIntent, checkoutInfo } = res.data
 
-      if (success) {
-        ToastAndroid.show(message, ToastAndroid.SHORT)
-      }
       dispatch({
         type: FETCH_PAYMENT_INTENT_SUCCEED,
         payload: { paymentParams: { paymentIntent, ...checkoutInfo } },
       })
     } catch (error) {
-      console.log(error)
       dispatch({
         type: FETCH_PAYMENT_INTENT_FAILED,
         payload: {
           error: 'Could not fetch payment details. Please try again later',
         },
       })
-      ToastAndroid.show('Payment Details fteching failed.', ToastAndroid.SHORT)
     } finally {
       dispatch({ type: SET_IS_LOADING, payload: { isLoading: false } })
     }

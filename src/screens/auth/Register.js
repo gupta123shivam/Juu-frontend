@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, View, ToastAndroid } from 'react-native'
 import {
   Button,
@@ -25,14 +25,8 @@ export default function ({ navigation }) {
   const { signUp, isLoading } = useAuthContext()
 
   const handleRegister = async () => {
-    // TODO
-    if (!email || !username || !password || !password2 || !mobile) {
-      ToastAndroid.show('Please fill all the details', ToastAndroid.LONG)
-    }
-    if (password !== password2) {
-      ToastAndroid.show('Please confirm yoour password', ToastAndroid.LONG)
-    }
-    signUp({
+    if (inputCheck()) return
+    await signUp({
       navigation,
       data: {
         email,
@@ -42,7 +36,16 @@ export default function ({ navigation }) {
       },
     })
   }
-
+  const inputCheck = () => {
+    if (!email || !username || !password || !password2 || !mobile) {
+      ToastAndroid.show('Please fill all the details', ToastAndroid.LONG)
+      return false
+    }
+    if (password !== password2) {
+      ToastAndroid.show('Please confirm your password', ToastAndroid.LONG)
+      return false
+    }
+  }
   return (
     <Layout>
       <TopNav middleContent='Register' />
@@ -51,9 +54,10 @@ export default function ({ navigation }) {
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
+          position: 'relative',
         }}
       >
-        <Section style={{ width: '80%', zIndex: -1 }}>
+        <Section style={{ width: '80%', zIndex: 1 }}>
           <SectionContent>
             <View style={styles.inputContainer}>
               <Text style={{ marginBottom: 10 }}>Username</Text>

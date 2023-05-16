@@ -35,13 +35,13 @@ export default function App() {
   if (!isReady) {
     return <Loading />
   }
-
   return (
     <PaperProvider>
       <ThemeProvider>
         <AuthProvider>
           <NavigationContainer
             onReady={onLayoutRootView}
+            initialState={initialState}
             onStateChange={(state) =>
               AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
             }

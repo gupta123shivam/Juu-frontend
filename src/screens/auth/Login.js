@@ -22,15 +22,12 @@ export default function ({ navigation }) {
 
   const { theme } = useTheme()
 
-  const handleSignIn = () => {
-    // Sent to the server
-    // TODO
-    // Show toastAndroid, both if failed and success
+  const handleSignIn = async () => {
     if (!email || !password) {
       ToastAndroid.show('Please fill all the details', ToastAndroid.SHORT)
       return
     }
-    signIn({
+    await signIn({
       navigation,
       data: {
         email,
@@ -97,7 +94,7 @@ export default function ({ navigation }) {
               style={styles.button}
             />
             <Button
-              text='Main Screen'
+              text='Demo'
               onPress={() => navigation.navigate('MainTabs')}
               outline
               style={styles.button}
