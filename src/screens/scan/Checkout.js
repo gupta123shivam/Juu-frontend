@@ -21,8 +21,6 @@ export default function Cart({ navigation }) {
   const { userInfo, fetchPaymentParams, paymentParams, isLoading } =
     useAuthContext()
 
-    console.log(paymentParams, err, ready)
-
   useEffect(() => {
     if (userInfo !== null) {
       initializePaymentSheet()
@@ -76,7 +74,7 @@ export default function Cart({ navigation }) {
     } else {
       Alert.alert(
         'Success',
-        'The payment was confirmed successfully. You will be redirected to Home in 5 sec'
+        'The payment was confirmed successfully. You will be redirected to Home in 5 sec.'
       )
       // send a request back to server telling that the payment was successful
       setTimeout(
