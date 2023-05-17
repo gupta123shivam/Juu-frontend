@@ -31,19 +31,32 @@ const saveToSecureStorage = async () => {}
 const getFromSecureStorage = async () => {}
 const removeFromSecureStorage = async () => {}
 
+// export const initialState = {
+//   isLoading: false,
+//   isSignout: false,
+//   userToken: null,
+//   userInfo: {
+//     username: 'John',
+//     email: 'john@gmail.com',
+//     mobile: '123456789',
+//     verified: false,
+//     previousBills: [],
+//     __v: 0,
+//   },
+//   tagID: 'tagID_101',
+//   error: '',
+//   previousBills: [],
+//   cart: [],
+//   paymentParams: {},
+//   preferredTheme: 'light',
+// }
+
 export const initialState = {
   isLoading: false,
   isSignout: false,
   userToken: null,
-  userInfo: {
-    username: 'John',
-    email: 'john@gmail.com',
-    mobile: '123456789',
-    verified: false,
-    previousBills: [],
-    __v: 0,
-  },
-  tagID: 'tagID_101',
+  userInfo: null,
+  tagID: null,
   error: '',
   previousBills: [],
   cart: [],
