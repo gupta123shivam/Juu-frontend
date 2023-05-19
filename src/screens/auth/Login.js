@@ -27,7 +27,7 @@ export default function ({ navigation }) {
       ToastAndroid.show('Please fill all the details', ToastAndroid.SHORT)
       return
     }
-    await signIn({
+    signIn({
       navigation,
       data: {
         email,

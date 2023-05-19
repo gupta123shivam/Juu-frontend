@@ -7,36 +7,42 @@ import { ActivityIndicator, MD2Colors } from 'react-native-paper'
 import { Ionicons } from '@expo/vector-icons'
 import axios from 'axios'
 
-import Constants from 'expo-constants'
 import { useAuthContext } from '../../context/authContext'
-// TODO Remove merchandid and publish key to .env
 import { COLORS, SHADOWS, SIZES } from '../../constants'
-import { MERCHANT_ID, PUBLISHABLE_KEY } from '@env'
+import { MERCHANT_ID, PUBLISHABLE_KEY, API_URL } from '@env'
 
 export default function Cart({ navigation }) {
   const [ready, setReady] = useState(false)
   const [err, setErr] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [paymentParams, setPaymentParams] = useState(null)
   const { initPaymentSheet, presentPaymentSheet, loading } = usePaymentSheet()
 
-  const { userInfo, fetchPaymentParams, paymentParams, isLoading } =
-    useAuthContext()
+  const { userInfo, fetchPaymentParams } = useAuthContext()
 
   useEffect(() => {
     if (userInfo !== null) {
-      initializePaymentSheet()
+      startFetchingPaymentDetails();
+  }}, [])
+
+  const startFetchingPaymentDetails = async()=>{
+    try{
+      const params = await fetchPaymentSheetParams();
+    setPaymentParams(params); // Update the paymentParams state
+    initializePaymentSheet(params); // Call initializePaymentSheet after the state update
     }
-  }, [])
+    catch(error){
+      setErr(true)
+      console.log('Error:', error)
+    }
+}
 
-  const initializePaymentSheet = async () => {
-    // return
+  const initializePaymentSheet = async (paymentParams) => {
     try {
-      await fetchPaymentParams()
-
       const { error } = await initPaymentSheet({
         paymentIntentClientSecret: paymentParams.paymentIntent,
         merchantDisplayName: 'Juu-India',
       })
-
       if (error) {
         setErr(error)
         Alert.alert(`Error Code: ${error.code}`, error.message)
@@ -46,12 +52,14 @@ export default function Cart({ navigation }) {
     } catch (error) {
       setErr(true)
       setReady(false)
+      console.log(error)
       ToastAndroid.show('Payment Intent generation failed.', ToastAndroid.SHORT)
     }
   }
 
   const fetchPaymentSheetParams = async () => {
     try {
+      setIsLoading(true)
       const response = await axios.post(
         `${API_URL}/payment/create-checkout-session`,
         {
@@ -62,15 +70,22 @@ export default function Cart({ navigation }) {
     } catch (error) {
       setErr(true)
       Alert.alert(`Network Error`, error.message)
+      // throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const buy = async () => {
-    // if (!ready) await initPaymentSheet()
+    if (!ready) {
+      setErr(false)
+      await startFetchingPaymentDetails()
+    }
     const { error } = await presentPaymentSheet()
     if (error) {
       Alert.alert(`Error code: ${error.code}`, error.message)
       setReady(false)
+      setErr(true)
     } else {
       Alert.alert(
         'Success',
@@ -97,7 +112,7 @@ export default function Cart({ navigation }) {
     )
   }
 
-  if (isLoading && !err) {
+  if ((isLoading && !err) || (paymentParams==null && !err)) {
     return (
       <CheckoutLayout navigation={navigation}>
         <ActivityIndicator
@@ -127,7 +142,7 @@ export default function Cart({ navigation }) {
       merchantIdentifier={MERCHANT_ID}
     >
       <CheckoutLayout navigation={navigation}>
-        <Checkout paymentParams={paymentParams} />
+        <Checkout paymentParams={paymentParams.checkoutInfo} />
         <Button
           text='Proceed to Pay'
           onPress={buy}
@@ -140,7 +155,6 @@ export default function Cart({ navigation }) {
 }
 
 const Checkout = ({ paymentParams }) => {
-  console.log(paymentParams)
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 25, textTransform: 'capitalize' }}>

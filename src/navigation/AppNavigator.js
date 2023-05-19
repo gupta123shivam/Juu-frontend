@@ -63,19 +63,19 @@ const HomeScreens = () => {
   )
 }
 
-const ScanStack = createNativeStackNavigator()
-const ScanScreens = () => {
+const CartStack = createNativeStackNavigator()
+const CartScreens = () => {
   return (
-    <ScanStack.Navigator
+    <CartStack.Navigator
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName='Scan'
+      initialRouteName='Cart'
     >
-      <ScanStack.Screen name='Scan' component={Scan} />
-      <ScanStack.Screen name='Cart' component={Cart} />
-      <ScanStack.Screen name='Checkout' component={Checkout} />
-    </ScanStack.Navigator>
+      <CartStack.Screen name='Scan' component={Scan} />
+      <CartStack.Screen name='Cart' component={Cart} />
+      <CartStack.Screen name='Checkout' component={Checkout} />
+    </CartStack.Navigator>
   )
 }
 
@@ -137,14 +137,14 @@ const MainTabs = () => {
         }}
       />
       <Tabs.Screen
-        name='ScanScreens'
-        component={ScanScreens}
+        name='CartScreens'
+        component={CartScreens}
         options={{
           tabBarLabel: ({ focused }) => (
-            <TabBarText focused={focused} title='Scan' />
+            <TabBarText focused={focused} title='Cart' />
           ),
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} icon={'ios-person'} />
+            <TabBarIcon focused={focused} icon={'cart-outline'} />
           ),
         }}
       />

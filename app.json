@@ -13,28 +13,36 @@
     "slug": "newapp",
     "sdkVersion": "48.0.0",
     "entryPoint": ".vscode\\exponentIndex.js",
-    "jsEngine": "hermes"
+    "jsEngine": "hermes",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "backgroundColor": "#FEF9B0",
+      "resizeMode": "cover"
+    }
   },
   "plugins": [
-    "expo-camera",
-    {
-      "cameraPermission": "Allow $(MyApp) to access your camera."
-    }
+    [
+      "expo-camera",
+      {
+        "cameraPermission": "Allow $(MyApp) to access your camera."
+      }
+    ],
+    [
+      "@stripe/stripe-react-native",
+      {
+        "merchantIdentifier": "Juu-India",
+        "enableGooglePay": true
+      }
+    ]
   ],
-  "splash": {
-    "image": "./src/assets/splash.png",
-    "backgroundColor": "#FEF9B0",
-    "resizeMode": "cover"
-  },
+
   "android": {
     "package": "com.shivamgupta4891651.newapp",
     "adaptiveIcon": {
       "foregroundImage": "./src/assets/adaptive-icon.png",
       "backgroundColor": "#FEF9B0"
     },
-    "permissions": [
-      "CAMERA"
-    ],
+    "permissions": ["CAMERA"],
     "userInterfaceStyle": "automatic"
   },
   "name": "newapp"

@@ -25,6 +25,8 @@ export default function App() {
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
+      // TODO to be removed
+      await new Promise(resolve => setTimeout(resolve, 2000));
       await SplashScreen.hideAsync()
     }
   }, [fontsLoaded])
@@ -41,7 +43,6 @@ export default function App() {
         <AuthProvider>
           <NavigationContainer
             onReady={onLayoutRootView}
-            initialState={initialState}
             onStateChange={(state) =>
               AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
             }

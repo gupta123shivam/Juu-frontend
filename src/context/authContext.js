@@ -31,38 +31,36 @@ const saveToSecureStorage = async () => {}
 const getFromSecureStorage = async () => {}
 const removeFromSecureStorage = async () => {}
 
-// export const initialState = {
-//   isLoading: false,
-//   isSignout: false,
-//   userToken: null,
-//   userInfo: {
-//     username: 'John',
-//     email: 'john@gmail.com',
-//     mobile: '123456789',
-//     verified: false,
-//     previousBills: [],
-//     __v: 0,
-//   },
-//   tagID: 'tagID_101',
-//   error: '',
-//   previousBills: [],
-//   cart: [],
-//   paymentParams: {},
-//   preferredTheme: 'light',
-// }
-
 export const initialState = {
   isLoading: false,
   isSignout: false,
   userToken: null,
-  userInfo: null,
-  tagID: null,
+  userInfo: {
+    username: 'John',
+    email: 'john@gmail.com',
+    mobile: '123456789',
+    verified: false,
+    previousBills: [],
+    __v: 0,
+  },
+  tagID: 'tagID_101',
   error: '',
-  previousBills: [],
   cart: [],
   paymentParams: {},
   preferredTheme: 'light',
 }
+
+// export const initialState = {
+//   isLoading: false,
+//   isSignout: false,
+//   userToken: null,
+//   userInfo: null,
+//   tagID: null,
+//   error: '',
+//   cart: [],
+//   paymentParams: {},
+//   preferredTheme: 'light',
+// }
 
 const AuthContext = createContext(null)
 
@@ -206,7 +204,7 @@ export const AuthProvider = ({ children }) => {
   const fetchCart = async () => {
     dispatch({ type: FETCH_CART_START })
     try {
-      const res = await axios.get(`${process.env.API_URL}/cart/get-cart`, {
+      const res = await axios.get(`${API_URL}/cart/get-cart`, {
         params: { tagID: state.tagID },
       })
       const result = res.data
