@@ -12,21 +12,21 @@
       "platform": "exponent",
       "expoHostType": "lan"
     },
-
     {
-      "name": "Debug Android",
-      "cwd": "${workspaceFolder}",
-      "type": "reactnative",
+      "name": "Debug in Exponent",
       "request": "launch",
-      "platform": "android",
-      "isDynamic": true
+      "type": "reactnative",
+      "cwd": "${workspaceFolder}",
+      "platform": "exponent",
+      "expoHostType": "lan"
     },
     {
       "name": "Attach to packager",
       "cwd": "${workspaceFolder}",
       "type": "reactnative",
       "request": "attach",
-      "isDynamic": true
+      "port": 19000,
+      "sourceMaps": true
     }
   ]
 }

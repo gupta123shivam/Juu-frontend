@@ -15,6 +15,10 @@ import { useAuthContext } from '../../context/authContext'
 export default function ({ navigation }) {
   const { userInfo } = useAuthContext()
   const { isDarkmode, setTheme } = useTheme()
+
+  const a = () => {
+      console.log(1)
+    };
   return (
     <Layout>
       <TopNav middleContent='Home' />
@@ -53,6 +57,7 @@ export default function ({ navigation }) {
               text={isDarkmode ? 'Light Mode' : 'Dark Mode'}
               status={isDarkmode ? 'success' : 'warning'}
               onPress={() => {
+                a()
                 if (isDarkmode) {
                   setTheme('light')
                 } else {
